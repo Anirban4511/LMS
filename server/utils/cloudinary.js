@@ -8,10 +8,10 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-export const uploadMedia = async (file) => {
+export const uploadMedia = async (file, type = "image") => {
   try {
     const uploadResponse = await cloudinary.uploader.upload(file, {
-      resource_type: "auto",
+      resource_type: type,
     });
     return uploadResponse;
   } catch (error) {
@@ -19,19 +19,18 @@ export const uploadMedia = async (file) => {
   }
 };
 
+export const deleteMediaFromCloudinary = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export const deleteMediaFromCloudinary=async(publicId)=>{
-    try {
-        await cloudinary.uploader.destroy(publicId);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export const deleteVideoFromCloudinary=async(publicId=>{
-    try {
-        await cloudinary.uploader.destroy(publicId,{resource_type:"video"})
-    } catch (error) {
-        console.log(error);
-    }
-}
+export const deleteVideoFromCloudinary = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: "video" });
+  } catch (error) {
+    console.log(error);
+  }
+};

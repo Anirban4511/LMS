@@ -128,9 +128,21 @@ export const updateProfile = async (req, res) => {
 
     //upload new or latest photo
     const cloudResponse = await uploadMedia(profilePhoto.path);
+    if (!cloudResponse || !cloudResponse.secure_url) {
+      return res.status(400).json({
+        success: false,
+        message: "Unsupported file type",
+      });
+    }
     const photoUrl = cloudResponse.secure_url;
     const updateData = { name, photoUrl };
-    const updatedUser=await user.findByIdAndUpdate(userId,updateData,{new:true})
+    const updatedUser=await User.findByIdAndUpdate(userId,updateData,{new:true}).select("-password")
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
+      message: "Profile updated successfully.",
+    });
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({
