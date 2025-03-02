@@ -8,9 +8,9 @@ import {
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
 import { Menu, School } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 // import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
@@ -28,9 +28,27 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { useLogoutUserMutation } from "@/features/api/authApi";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import Login from "@/pages/Login";
 
 const Navbar = () => {
-  const user = true;
+  const [authMode, setAuthMode] = useState("");
+  const { user } = useSelector((store) => store.auth);
+  const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    await logoutUser();
+  };
+  // console.log(user)
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data.message || "User is Logged out");
+      navigate("/login");
+    }
+  }, [isSuccess]);
 
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
@@ -67,7 +85,9 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Log out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logoutHandler}>
+                    Log out
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 {user?.role === "instructor" && (
                   <>
@@ -84,7 +104,8 @@ const Navbar = () => {
               <Button variant="outline" onClick={() => navigate("/login")}>
                 Login
               </Button>
-              <Button onClick={() => navigate("/login")}>Signup</Button>
+              <Button onClick={() => setAuthMode("signup")}>Signup</Button>
+              {authMode === "signup" && <Login value="signup" />}
             </div>
           )}
           <DarkMode />

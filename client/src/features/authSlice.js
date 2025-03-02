@@ -4,21 +4,21 @@ const initialState = {
   user: null,
   isAuthenticated: false,
 };
-// userLoggedIn({name:"anirban"})
+
 const authSlice = createSlice({
-  name: "authSlice",
+  name: "auth",  // Keep a simple name
   initialState,
-  reducer: {
+  reducers: {   // ✅ Fix: Use 'reducers' instead of 'reducer'
     userLoggedIn: (state, action) => {
-      state.user = action.payload.user;
-      state.isAuthenticated=true
+      state.user = action.payload;  // ✅ Fix: Store 'action.payload' directly
+      state.isAuthenticated = true;
     },
-    userLoggedOut:(state)=>{
-      state.user=null
-      state.isAuthenticated=false
-    }
+    userLoggedOut: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+    },
   },
 });
 
-export const {userLoggedIn,userLoggedOut}=authSlice.actions;
-export default authSlice.reducer
+export const { userLoggedIn, userLoggedOut } = authSlice.actions;
+export default authSlice.reducer;

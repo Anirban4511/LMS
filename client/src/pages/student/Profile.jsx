@@ -31,36 +31,33 @@ const Profile = () => {
   // const enrolledCourses = [1, 2];
   const [
     updateUser,
-    {
-      data: updateUserData,
-      isLoading: updateUserIsLoading,
-      isError,
-      error,
-      isSuccess,
-    },
+    { data: updateUserData, isLoading: updateUserIsLoading,isSuccess,error,isError },
   ] = useUpdateUserMutation();
   const onChangeHandler = (e) => {
     const file = e.target.files?.[0];
     if (file) setProfilePhoto(file);
   };
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success(data.message || "Profile Updated");
-    }
-    if (isError) {
-      toast.error(error.message || "Failed to updated");
-    }
-  }, [error, data, isSuccess, isError]);
-
   if (isLoading) return <h1>Profile Loading..........</h1>;
   const { user } = data;
-  const updateUserHandler = async () => {
+  const updateUserHandler = async() => {
     // console.log(name, profilePhoto);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("profilePhoto", profilePhoto);
-    await updateUser(formData);
+    const formData=new FormData()
+    formData.append("profilePhoto",profilePhoto)
+    await updateUser(formData)
   };
+
+
+  useEffect(() => {
+    if(isSuccess)
+    {
+      toast.success(data.message||"Profile Updated")
+    }
+    if(isError)
+    {
+      toast.error(error.message||"Failed to updated")
+    }
+  }, [error,data,isSuccess,isError])
+  
 
   // const isLoading = true;
   return (

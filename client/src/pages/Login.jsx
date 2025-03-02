@@ -20,7 +20,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const Login = () => {
+const Login = (props) => {
+  // const [tabValue, setTabValue] = useState("login");
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
   const [signupInput, setSignupInput] = useState({
     name: "",
@@ -56,7 +57,14 @@ const Login = () => {
       setLoginInput({ ...loginInput, [name]: value });
     }
   };
-
+  // useEffect(() => {
+  //   if (props.value) {
+  //     setTabValue(props.value);
+  //   }
+  // }, [props.value]);
+  const handleForgotPassword = () => {
+    navigate("/forgot-password"); // Redirect to Forgot Password page
+  };
   const handleRegister = async (type) => {
     const inputData = type === "signup" ? signupInput : loginInput;
     const action = type === "signup" ? registerUser : loginUser;
@@ -84,9 +92,10 @@ const Login = () => {
     loginError,
     registerError,
   ]);
+  // console.log(props.value)
   return (
     <div className="flex justify-center items-center h-screen mt-2">
-      <Tabs defaultValue="account" className="w-[400px]">
+      <Tabs defaultValue={"login"} className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signup">Signup</TabsTrigger>
           <TabsTrigger value="login">Login</TabsTrigger>
@@ -181,7 +190,7 @@ const Login = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
+            <CardFooter className="flex flex-row-reverse justify-between">
               <Button
                 disabled={loginIsLoading}
                 onClick={() => handleRegister("login")}
@@ -195,6 +204,7 @@ const Login = () => {
                   "Login"
                 )}
               </Button>
+              <Button onClick={handleForgotPassword}>Forgot Password</Button>
             </CardFooter>
           </Card>
         </TabsContent>

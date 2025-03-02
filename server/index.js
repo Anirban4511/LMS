@@ -29,6 +29,9 @@ app.get("/home", (_, res) => {
     message: "Hello I am coming from backend",
   });
 });
+app.get("/", (req, res) => {
+  res.status(200).json({ success: true, message: "This is the base url" });
+});
 app.listen(PORT, () => {
   console.log(`Server listen at PORT ${PORT}`);
 });
